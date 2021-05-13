@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
+#include <math.h>
 
 #include "node.h"
 #include "hash_table.h"
@@ -41,12 +42,17 @@ int hash_function1(struct hash_table* hash_table, char* key) {
  */
 
 int hash_function2(struct hash_table* hash_table, char* key) {
-  /*
-   * Currently this is the same as hash_function2, but your assignment is 
-   * to modify it to create an improved hash function: 
-   */
+  
+  //Generate a unique value based off of the first 5 letters and the size of the word, rather than just the first letter like the first hash function does
+  int word_id = 0;
+  //How it works is basically the word_id gets sent through the 5 gates of hell, each gate doing some really random math stuff which are meant to give vastly different results for even similar inputs
+  if (key[0] != '\0') word_id = key[0] + 1;
+  if (key[1] != '\0') word_id = word_id * ((int)key[1]) + word_id + ((int)key[1]) + 1;
+  if (key[2] != '\0') word_id = word_id + 26 - ((int)key[2]) + 1;
+  if (key[3] != '\0') word_id = word_id + ((int)key[3]) + 1;
+  if (key[4] != '\0') word_id = word_id + 26 - ((int)key[4]) + 1 + hash_table->size;
 
-  return ( (int) key[0] ) % hash_table->size;
+  return word_id % hash_table->size;
 }
 
 struct hash_table* hash_table_create(int array_size) {
