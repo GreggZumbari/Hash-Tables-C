@@ -190,9 +190,25 @@ int hash_table_collisions(struct hash_table* hash_table) {
    * as one collision, three elements would count as 2 collisions and so on. 
    */
   int num_col = 0;
-  
+
   // code goes here: 
 
+  //Iterate through all of the hash table's elements and count any that are in the same address
+  for (int i = 0; i < hash_table->size-1; i++) {
+      
+    //If array[i] isn't NULL...
+    struct node* buffer = hash_table->array[i];
+    if (buffer != NULL) {
+      num_col--; //Remove 1 from the count because the head node doesn't count as a collision node
+      while (buffer != NULL) {
+        //...then add 1 to num_col and iterate to the next node in the chain
+        num_col++;
+        buffer = buffer->next;
+      }
+    }
+
+  }
+  
   return num_col;
 }
 
